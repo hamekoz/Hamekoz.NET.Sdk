@@ -1,5 +1,7 @@
 ﻿using Hamekoz.Api.Exceptions;
 
+using Microsoft.AspNetCore.Http;
+
 namespace Hamekoz.Api.Middlewares;
 
 public class ExceptionHandlingMiddleware(RequestDelegate next)

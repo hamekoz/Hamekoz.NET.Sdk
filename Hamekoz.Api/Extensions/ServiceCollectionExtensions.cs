@@ -4,6 +4,7 @@ using Hamekoz.Api.Models;
 using Hamekoz.Api.Services;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hamekoz.Api.Extensions;
 

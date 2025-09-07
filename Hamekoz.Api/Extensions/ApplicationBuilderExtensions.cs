@@ -1,4 +1,6 @@
-﻿namespace Hamekoz.Api.Extensions;
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace Hamekoz.Api.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
