@@ -3,12 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hamekoz.Api", "Hamekoz.Api\Hamekoz.Api.csproj", "{96BB8F67-0101-CE9E-C8E8-5877376FEB2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hamekoz.Api.Tests", "Hamekoz.Api.Tests\Hamekoz.Api.Tests.csproj", "{E01E6A74-0A6F-45CC-964C-7461086E2EEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96BB8F67-0101-CE9E-C8E8-5877376FEB2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96BB8F67-0101-CE9E-C8E8-5877376FEB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96BB8F67-0101-CE9E-C8E8-5877376FEB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96BB8F67-0101-CE9E-C8E8-5877376FEB2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E01E6A74-0A6F-45CC-964C-7461086E2EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E01E6A74-0A6F-45CC-964C-7461086E2EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E01E6A74-0A6F-45CC-964C-7461086E2EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E01E6A74-0A6F-45CC-964C-7461086E2EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE4C7701-FA31-4120-9F65-A6070178082E}
 	EndGlobalSection
 EndGlobal
