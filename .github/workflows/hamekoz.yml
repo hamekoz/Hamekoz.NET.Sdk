@@ -4,21 +4,21 @@ on:
   pull_request:
     branches: ["main"]
   push:
-    branches: ["main", "INT"]
+    branches: ["main"]
     tags:
       - v*.*.*
 
 jobs:
-  Hamekoz:
-    name: Conventions
-    uses: Hamekoz/.github/.github/workflows/conventions.yml@main
-    secrets: inherit
-  dotnet:
+  conventional-commits:
+    name: Conventional Commits
+    uses: hamekoz/.github/.github/workflows/conventional-commits.yml@main
+  continuous-integration:
     name: Continuous Integration
-    uses: Hamekoz/.github/.github/workflows/dotnet.yml@main
-    secrets: inherit
-  nuget:
+    needs: conventional-commits
+    uses: hamekoz/.github/.github/workflows/dotnet.yml@main
+  continuous-delivery:
     if: ${{ github.event_name == 'push' }}
     name: Continuous Delivery
-    uses: Hamekoz/.github/.github/workflows/continuous-delivery-nuget.yml@main
+    needs: [conventional-commits, continuous-integration]
+    uses: hamekoz/.github/.github/workflows/continuous-delivery-nuget.yml@main
     secrets: inherit
