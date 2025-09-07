@@ -6,9 +6,9 @@ using Hamekoz.Api.Services;
 
 namespace Hamekoz.Api.Example.Controllers;
 
-public class CountryController(
+public class CountriesController(
         IMapper mapper,
         ICrudService<Country> crudService)
-    : CrudController<Country, Country, Country, Country, Country>(mapper, crudService)
+    : CrudController<Country>(mapper, crudService)
 {
 }

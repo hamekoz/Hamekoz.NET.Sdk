@@ -2,8 +2,8 @@
 
 namespace Hamekoz.Api.Models;
 
-public class IEntity
+public abstract class Entity
 {
     [JsonPropertyOrder(1)]
-    public required int Id { get; init; }
+    public int Id { get; init; }
 }

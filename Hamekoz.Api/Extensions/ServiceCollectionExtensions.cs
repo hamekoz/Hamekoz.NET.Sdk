@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
 
         // Obtener todas las clases derivadas de T
         var derivedTypes = entitiesAssembly.GetTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && typeof(IEntity).IsAssignableFrom(t));
+            .Where(t => t.IsClass && !t.IsAbstract && typeof(Entity).IsAssignableFrom(t));
 
         foreach (var derivedType in derivedTypes)
         {

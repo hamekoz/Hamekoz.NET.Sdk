@@ -6,7 +6,7 @@ namespace Hamekoz.Api.Services;
 /// Defines a generic service interface for CRUD operations on entities of type T.
 /// </summary>
 /// <typeparam name="T">Entity Type</typeparam>s
-public interface ICrudService<T> where T : IEntity
+public interface ICrudService<T> where T : Entity
 {
     public Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
