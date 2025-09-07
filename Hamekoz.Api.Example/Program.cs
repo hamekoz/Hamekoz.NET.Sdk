@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 
+using Hamekoz.Api.Example;
 using Hamekoz.Api.Example.Data;
 using Hamekoz.Api.Extensions;
 
@@ -23,7 +24,7 @@ builder.Services
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddUniqueImplementationOfServices();
-
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 builder.Services.AddHamekozApi<HamekozExampleDbContext>();
 
 var app = builder.Build();
