@@ -1,0 +1,18 @@
+# Normalizar todos los archivos de texto a LF en el repo
+* text eol=lf
+
+# Archivos que sí requieren CRLF en Windows (scripts batch)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Archivos binarios: nunca tocar
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.tar  binary
+*.gz   binary
+*.mp4  binary
