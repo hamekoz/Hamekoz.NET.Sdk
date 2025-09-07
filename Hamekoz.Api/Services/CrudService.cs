@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hamekoz.Api.Services;
 public class CrudService<T, C>(C context) : ICrudService<T>
-    where T : IEntity
+    where T : Entity
     where C : DbContext
 {
     public virtual async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
