@@ -5,12 +5,36 @@
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/"
     schedule:
       interval: "daily"
-      commit-message:
-        # No puedes forzar Conventional Commits, pero puedes influir en el mensaje
-        # Dependabot suele usar "chore: bump..."
-        prefix: "chore:" 
-        include: "scope" 
+    commit-message:
+      prefix: "chore:"
+      prefix-development: "chore(dev):"
+      include: "scope"
+    labels:
+      - "dotnet-sdk"
+      - "dependencies"
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore:"
+      prefix-development: "chore(dev):"
+      include: "scope"
+    labels:
+      - "nuget"
+      - "dependencies"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore:"
+      prefix-development: "chore(dev):"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "dependencies"
