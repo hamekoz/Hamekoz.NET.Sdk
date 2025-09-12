@@ -1,67 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    ":dependencyDashboard",
-    ":semanticCommits"
-  ],
-  "semanticCommits": "enabled",
-  "semanticCommitType": "chore",
-  "semanticCommitScope": "deps",
-  "enabledManagers": [
-    "nuget",
-    "dotnet-sdk",
-    "docker",
-    "github-actions"
-  ],
-  "timezone": "America/Argentina/Buenos_Aires",
-  "dependencyDashboard": true,
-
   "packageRules": [
     {
+      "description": "Automerge non-major updates",
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "automergeType": "branch",
-      "schedule": ["at any time"],
-      "semanticCommitType": "chore",
-      "semanticCommitScope": "deps"
-    },
-    {
-      "matchManagers": ["nuget"],
-      "matchUpdateTypes": ["major"],
-      "groupName": "NuGet major updates",
-      "automerge": false,
-      "schedule": ["after 9am on monday"],
-      "semanticCommitType": "feat",
-      "semanticCommitScope": "nuget"
-    },
-    {
-      "matchManagers": ["dotnet-sdk"],
-      "groupName": ".NET SDK",
-      "separateMajorMinor": true,
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "schedule": ["at any time"],
-      "semanticCommitType": "chore",
-      "semanticCommitScope": "dotnet"
-    },
-    {
-      "matchManagers": ["docker"],
-      "groupName": "Docker base images",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "schedule": ["at any time"],
-      "semanticCommitType": "chore",
-      "semanticCommitScope": "docker"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "groupName": "GitHub Actions",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "schedule": ["at any time"],
-      "semanticCommitType": "chore",
-      "semanticCommitScope": "gha"
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
     }
+  ],
+  "dependencyDashboard": true,
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":combinePatchMinorReleases",
+    ":enableVulnerabilityAlerts"
   ]
 }
