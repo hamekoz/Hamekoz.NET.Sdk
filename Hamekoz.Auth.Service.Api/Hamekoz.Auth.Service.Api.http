@@ -1,0 +1,6 @@
+@Hamekoz.Auth.Service.Api_HostAddress = http://localhost:5241
+
+GET {{Hamekoz.Auth.Service.Api_HostAddress}}/
+Accept: application/json
+
+###

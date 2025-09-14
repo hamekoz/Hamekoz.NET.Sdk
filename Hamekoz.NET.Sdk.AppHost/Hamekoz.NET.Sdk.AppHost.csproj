@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hamekoz.Api.Example\Hamekoz.Api.Example.csproj" />
+    <ProjectReference Include="..\Hamekoz.Auth.Service.Api\Hamekoz.Auth.Service.Api.csproj" />
   </ItemGroup>
 
 </Project>
