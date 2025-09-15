@@ -14,6 +14,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<HamekozAuthDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddOpenIddict()
+    .AddCore(options => { /* ... */ })
+    .AddServer(options => { /* ... */ })
+    .AddValidation(options => { /* ... */ });
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -30,6 +35,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
