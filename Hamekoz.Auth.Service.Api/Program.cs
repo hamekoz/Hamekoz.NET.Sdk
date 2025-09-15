@@ -1,8 +1,18 @@
+using Hamekoz.Auth.Service.API.Data;
+
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
 // Add services to the container.
+
+builder.AddSqlServerDbContext<HamekozAuthDbContext>("hamekoz-auth-service-api-db");
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<HamekozAuthDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
