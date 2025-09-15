@@ -19,6 +19,14 @@ builder.Services.AddOpenIddict()
     .AddServer(options => { /* ... */ })
     .AddValidation(options => { /* ... */ });
 
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        googleOptions.SignInScheme = OpenIddictConstants.Schemes.External;
+    });
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
