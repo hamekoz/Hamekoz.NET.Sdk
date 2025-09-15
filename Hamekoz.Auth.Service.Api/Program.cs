@@ -27,6 +27,10 @@ builder.Services.AddAuthentication()
         googleOptions.SignInScheme = OpenIddictConstants.Schemes.External;
     });
 
+// Configuración de Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -39,6 +43,9 @@ app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
 }
 
 app.UseHttpsRedirection();

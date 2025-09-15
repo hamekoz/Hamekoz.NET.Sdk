@@ -21,6 +21,7 @@
     </PackageReference>
     <PackageReference Include="OpenIddict.AspNetCore" Version="7.1.0" />
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="7.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
