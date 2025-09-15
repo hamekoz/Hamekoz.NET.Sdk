@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Aspire AppHost",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/Hamekoz.NET.Sdk.AppHost/bin/Debug/net9.0/Hamekoz.NET.Sdk.AppHost.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Hamekoz.NET.Sdk.AppHost",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "launchBrowser": {
+                "enabled": true,
+                "args": "${auto-detected-url}"
+            }
+        }
+    ]
+}
