@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <ProjectReference Include="..\Hamekoz.Api\Hamekoz.Api.csproj" />
     <ProjectReference Include="..\Hamekoz.NET.Sdk.ServiceDefaults\Hamekoz.NET.Sdk.ServiceDefaults.csproj" />
   </ItemGroup>
