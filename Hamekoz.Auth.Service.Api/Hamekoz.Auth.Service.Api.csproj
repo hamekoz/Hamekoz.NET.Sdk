@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hamekoz.NET.Sdk.ServiceDefaults\Hamekoz.NET.Sdk.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Hamekoz.Auth\Hamekoz.Auth.csproj" />
   </ItemGroup>
 
   <ItemGroup>

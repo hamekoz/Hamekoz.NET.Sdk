@@ -43,6 +43,11 @@ namespace Hamekoz.Auth.Service.Api.Controllers
             var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
             var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
 
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email not found in Google claims.");
+            }
+
             // Buscar si el usuario ya existe en nuestra base de datos
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
@@ -56,8 +61,8 @@ namespace Hamekoz.Auth.Service.Api.Controllers
             var claims = new List<Claim>
             {
                 new(OpenIddictConstants.Claims.Subject, user.Id),
-                new(OpenIddictConstants.Claims.Email, user.Email),
-                new(OpenIddictConstants.Claims.Name, name),
+                new(OpenIddictConstants.Claims.Email, user.Email ?? email),
+                new(OpenIddictConstants.Claims.Name, name ?? email), // Fallback to email if name is null
                 new(OpenIddictConstants.Claims.EmailVerified, "true", OpenIddictConstants.Destinations.AccessToken)
             };
             
