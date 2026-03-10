@@ -15,16 +15,19 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         catch (ValidationException ex)
         {
             context.Response.StatusCode = 400;
+            context.Response.ContentType = "application/json";
             await context.Response.WriteAsJsonAsync(new { ex.Message });
         }
         catch (NotFoundException ex)
         {
             context.Response.StatusCode = 404;
+            context.Response.ContentType = "application/json";
             await context.Response.WriteAsJsonAsync(new { ex.Message });
         }
         catch (Exception ex)
         {
             context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/json";
             await context.Response.WriteAsJsonAsync(new { ex.Message });
         }
     }
