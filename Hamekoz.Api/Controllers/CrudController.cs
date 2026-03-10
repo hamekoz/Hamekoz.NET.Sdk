@@ -39,6 +39,26 @@ public abstract class CrudController<TEntity, TListItemDto, TCreateDto, TDetailD
         return Ok(dto);
     }
 
+    // GET: api/Ts/paged?page=1&pageSize=10
+    [HttpGet("paged")]
+    public async Task<ActionResult<PagedResult<TListItemDto>>> GetPaged(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
+    {
+        var pagedEntities = await service.GetPagedAsync(page, pageSize, cancellationToken);
+
+        var pagedDto = new PagedResult<TListItemDto>
+        {
+            Items = mapper.Map<IEnumerable<TListItemDto>>(pagedEntities.Items),
+            TotalCount = pagedEntities.TotalCount,
+            Page = pagedEntities.Page,
+            PageSize = pagedEntities.PageSize,
+        };
+
+        return Ok(pagedDto);
+    }
+
     // GET: api/Ts/5
     [HttpGet("{id}")]
     public async Task<ActionResult<TDetailDto>> GetById(int id, CancellationToken cancellationToken)
@@ -60,7 +80,7 @@ public abstract class CrudController<TEntity, TListItemDto, TCreateDto, TDetailD
 
         var readDto = mapper.Map<TDetailDto>(created);
 
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, readDto);
     }
 
     // PUT: api/Ts/5
