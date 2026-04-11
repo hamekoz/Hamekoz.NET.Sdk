@@ -1,10 +1,14 @@
 ﻿using Hamekoz.Api.Exceptions;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Hamekoz.Api.Middlewares;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next)
+public class ExceptionHandlingMiddleware(
+    RequestDelegate next,
+    ILogger<ExceptionHandlingMiddleware> logger)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -14,21 +18,45 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         }
         catch (ValidationException ex)
         {
-            context.Response.StatusCode = 400;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new { ex.Message });
+            await WriteProblemDetailsAsync(
+                context,
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Validation Error",
+                detail: ex.Message);
         }
         catch (NotFoundException ex)
         {
-            context.Response.StatusCode = 404;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new { ex.Message });
+            await WriteProblemDetailsAsync(
+                context,
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Not Found",
+                detail: ex.Message);
         }
         catch (Exception ex)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new { ex.Message });
+            logger.LogError(ex, "Unhandled exception for request {Method} {Path}", context.Request.Method, context.Request.Path);
+            await WriteProblemDetailsAsync(
+                context,
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: "Internal Server Error",
+                detail: "An unexpected error occurred.");
         }
+    }
+
+    private static Task WriteProblemDetailsAsync(HttpContext context, int statusCode, string title, string detail)
+    {
+        var problemDetails = new ProblemDetails
+        {
+            Status = statusCode,
+            Title = title,
+            Detail = detail,
+            Instance = context.Request.Path,
+        };
+        problemDetails.Extensions["traceId"] = context.TraceIdentifier;
+
+        context.Response.StatusCode = statusCode;
+        context.Response.ContentType = "application/problem+json";
+
+        return context.Response.WriteAsJsonAsync(problemDetails);
     }
 }
