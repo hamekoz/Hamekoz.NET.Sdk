@@ -1,6 +1,6 @@
 # Hamekoz.NET.Sdk
-
 SDK para .NET 9 orientado a construir APIs REST con un enfoque **template/reutilizable** y bajo coste de desarrollo para aplicaciones específicas.
+.NET 9 SDK for building REST APIs with a reusable template-based approach and low development cost for specific applications.
 
 ## Objetivo
 

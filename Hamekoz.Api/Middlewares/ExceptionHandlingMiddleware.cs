@@ -34,7 +34,7 @@ public class ExceptionHandlingMiddleware(
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unhandled exception for request {Method} {Path}", context.Request.Method, context.Request.Path);
+            logger.LogError(ex, "Unhandled exception. TraceId: {TraceId}", context.TraceIdentifier);
             await WriteProblemDetailsAsync(
                 context,
                 statusCode: StatusCodes.Status500InternalServerError,
