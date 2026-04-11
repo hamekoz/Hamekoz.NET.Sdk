@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
 
         var derivedTypes = GetLoadableTypes(entitiesAssembly)
             .Where(t => t.IsClass && !t.IsAbstract && !t.ContainsGenericParameters && typeof(Entity).IsAssignableFrom(t))
-            .OrderBy(t => t.FullName);
+            .OrderBy(t => t.FullName ?? t.Name);
 
         foreach (var derivedType in derivedTypes)
         {
@@ -104,7 +104,7 @@ public static class ServiceCollectionExtensions
     {
         return GetLoadableTypes(assembly)
             .Where(type => type.IsClass && !type.IsAbstract && !type.ContainsGenericParameters && type.IsSubclassOf(baseType))
-            .OrderBy(type => type.FullName);
+            .OrderBy(type => type.FullName ?? type.Name);
     }
 
     private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
@@ -115,7 +115,7 @@ public static class ServiceCollectionExtensions
         }
         catch (ReflectionTypeLoadException ex)
         {
-            return ex.Types.Where(t => t is not null)!;
+            return ex.Types.Where(t => t is not null).Cast<Type>();
         }
     }
 }
