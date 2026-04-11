@@ -50,7 +50,7 @@ public class ExceptionHandlingMiddleware(
             Status = statusCode,
             Title = title,
             Detail = detail,
-            Instance = context.Request.Path,
+            Instance = context.Request.Path.Value,
         };
         problemDetails.Extensions["traceId"] = context.TraceIdentifier;
 
