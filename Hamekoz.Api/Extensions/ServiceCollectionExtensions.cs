@@ -5,6 +5,7 @@ using Hamekoz.Api.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Hamekoz.Api.Extensions;
 
@@ -29,56 +30,56 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static void AddCrudServices<T>(
+    public static IServiceCollection AddCrudServices<T>(
         this IServiceCollection services,
         Assembly? entitiesAssembly = null)
         where T : DbContext
     {
         entitiesAssembly ??= Assembly.GetCallingAssembly();
 
-        // Obtener todas las clases derivadas de T
-        var derivedTypes = entitiesAssembly.GetTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && typeof(Entity).IsAssignableFrom(t));
+        var derivedTypes = GetLoadableTypes(entitiesAssembly)
+            .Where(t => t.IsClass && !t.IsAbstract && !t.ContainsGenericParameters && typeof(Entity).IsAssignableFrom(t))
+            .OrderBy(t => t.FullName);
 
         foreach (var derivedType in derivedTypes)
         {
-            // Crear tipos genéricos
             var serviceInterface = typeof(ICrudService<>).MakeGenericType(derivedType);
             var serviceClass = typeof(CrudService<,>).MakeGenericType(derivedType, typeof(T));
 
-            services.AddScoped(serviceInterface, serviceClass);
+            services.TryAddScoped(serviceInterface, serviceClass);
         }
+
+        return services;
     }
 
     public static IServiceCollection AddUniqueImplementationOfServices(this IServiceCollection services, Assembly? assembly = null, string? namespaceKeyWordFilter = null)
     {
         assembly ??= Assembly.GetCallingAssembly();
-
-        // Encontrar todas las interfaces"
-        var interfaces = assembly.GetExportedTypes()
-            .Where(t => t.FullName != null && t.FullName.Contains(namespaceKeyWordFilter ?? string.Empty) && t.IsInterface)
+        var loadableTypes = GetLoadableTypes(assembly)
+            .Where(t => t.IsPublic)
             .ToList();
 
-        // Registrar solo las interfaces que tienen una única implementación
+        var interfaces = loadableTypes
+            .Where(t => t.IsInterface && !t.IsGenericTypeDefinition && t.FullName != null && t.FullName.Contains(namespaceKeyWordFilter ?? string.Empty))
+            .ToList();
+
         foreach (var interfaceType in interfaces)
         {
-            // Encontrar todas las implementaciones de interfaces"
-            var implementations = assembly.GetExportedTypes()
+            var implementations = loadableTypes
                 .Where(interfaceType.IsAssignableFrom)
-                .Where(t => t.IsClass && !t.IsAbstract)
+                .Where(t => t.IsClass && !t.IsAbstract && !t.ContainsGenericParameters)
                 .ToList();
 
-            // Si hay exactamente una implementación, registrar en el contenedor
             if (implementations.Count == 1)
             {
-                services.AddScoped(interfaceType, implementations[0]);
+                services.TryAddScoped(interfaceType, implementations[0]);
             }
         }
 
         return services;
     }
 
-    public static void AddTemplateServices(
+    public static IServiceCollection AddTemplateServices(
         this IServiceCollection services,
         Type baseType,
         Type serviceTemplateInterfaceType,
@@ -93,19 +94,28 @@ public static class ServiceCollectionExtensions
         {
             var serviceIntefaceType = serviceTemplateInterfaceType.MakeGenericType(type);
             var serviceClassType = serviceTemplateClassType.MakeGenericType(type);
-            services.AddScoped(serviceIntefaceType, serviceClassType);
+            services.TryAddScoped(serviceIntefaceType, serviceClassType);
         }
+
+        return services;
     }
 
     private static IEnumerable<Type> GetDerivedTypes(Type baseType, Assembly assembly)
     {
-        // Iterar sobre los ensamblados y obtener los tipos que son subclases de la clase base
-        foreach (var type in assembly!.GetTypes())
+        return GetLoadableTypes(assembly)
+            .Where(type => type.IsClass && !type.IsAbstract && !type.ContainsGenericParameters && type.IsSubclassOf(baseType))
+            .OrderBy(type => type.FullName);
+    }
+
+    private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+    {
+        try
         {
-            if (type.IsSubclassOf(baseType))
-            {
-                yield return type;
-            }
+            return assembly.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            return ex.Types.Where(t => t is not null)!;
         }
     }
 }
