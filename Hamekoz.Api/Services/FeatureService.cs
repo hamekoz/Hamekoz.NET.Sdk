@@ -4,11 +4,14 @@ using Hamekoz.Api.Exceptions;
 
 namespace Hamekoz.Api.Services;
 
+/// <summary>
+/// In-memory implementation of feature management with three hierarchical levels.
+/// </summary>
 public class FeatureService : IFeatureService
 {
     private readonly ConcurrentDictionary<string, bool> _level1 = new(StringComparer.OrdinalIgnoreCase);
     private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, bool>> _level2 = new(StringComparer.OrdinalIgnoreCase);
-    private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, bool>> _level3 = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, ConcurrentDictionary<string, bool>>> _level3 = new(StringComparer.OrdinalIgnoreCase);
 
     public Task SetLevel1Async(string featureKey, bool isEnabled, CancellationToken cancellationToken = default)
     {
@@ -38,15 +41,18 @@ public class FeatureService : IFeatureService
         var normalizedFeatureKey = NormalizeRequired(featureKey, nameof(featureKey));
         var normalizedLevel2Key = NormalizeRequired(level2Key, nameof(level2Key));
         var normalizedLevel3Key = NormalizeRequired(level3Key, nameof(level3Key));
-        var level3CompositeKey = BuildLevel3Key(normalizedLevel2Key, normalizedLevel3Key);
 
         cancellationToken.ThrowIfCancellationRequested();
 
         var featureLevel3 = _level3.GetOrAdd(
             normalizedFeatureKey,
+            _ => new ConcurrentDictionary<string, ConcurrentDictionary<string, bool>>(StringComparer.OrdinalIgnoreCase));
+
+        var featureLevel2 = featureLevel3.GetOrAdd(
+            normalizedLevel2Key,
             _ => new ConcurrentDictionary<string, bool>(StringComparer.OrdinalIgnoreCase));
 
-        featureLevel3[level3CompositeKey] = isEnabled;
+        featureLevel2[normalizedLevel3Key] = isEnabled;
         return Task.CompletedTask;
     }
 
@@ -70,8 +76,9 @@ public class FeatureService : IFeatureService
 
         if (normalizedLevel2Key is not null && normalizedLevel3Key is not null)
         {
-            var level3CompositeKey = BuildLevel3Key(normalizedLevel2Key, normalizedLevel3Key);
-            if (_level3.TryGetValue(normalizedFeatureKey, out var featureLevel3) && featureLevel3.TryGetValue(level3CompositeKey, out var level3Value))
+            if (_level3.TryGetValue(normalizedFeatureKey, out var featureLevel3)
+                && featureLevel3.TryGetValue(normalizedLevel2Key, out var level3ByLevel2)
+                && level3ByLevel2.TryGetValue(normalizedLevel3Key, out var level3Value))
             {
                 return Task.FromResult(level3Value);
             }
@@ -112,10 +119,5 @@ public class FeatureService : IFeatureService
         }
 
         return value.Trim();
-    }
-
-    private static string BuildLevel3Key(string level2Key, string level3Key)
-    {
-        return $"{level2Key}:{level3Key}";
     }
 }

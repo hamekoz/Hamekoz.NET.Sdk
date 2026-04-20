@@ -85,9 +85,9 @@ public class FeatureServiceDiTests
     public void AddHamekozApi_Should_RegisterFeatureService()
     {
         var services = new ServiceCollection();
-        services.AddDbContext<FeatureServiceTestDbContext>(options => options.UseInMemoryDatabase("feature-service-di"));
+        services.AddDbContext<DiTestDbContext>(options => options.UseInMemoryDatabase("feature-service-di"));
 
-        services.AddHamekozApi<FeatureServiceTestDbContext>(typeof(FeatureServiceDiTests).Assembly);
+        services.AddHamekozApi<DiTestDbContext>(typeof(FeatureServiceDiTests).Assembly);
 
         using var provider = services.BuildServiceProvider();
         var featureService = provider.GetRequiredService<IFeatureService>();
@@ -96,4 +96,4 @@ public class FeatureServiceDiTests
     }
 }
 
-public class FeatureServiceTestDbContext(DbContextOptions<FeatureServiceTestDbContext> options) : DbContext(options);
+public class DiTestDbContext(DbContextOptions<DiTestDbContext> options) : DbContext(options);
