@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
         entitiesAssembly ??= Assembly.GetCallingAssembly();
 
         services.AddCrudServices<TDbContext>(entitiesAssembly);
+        services.AddFeatureManagementService();
 
         return services;
     }
@@ -97,6 +98,12 @@ public static class ServiceCollectionExtensions
             services.TryAddScoped(serviceIntefaceType, serviceClassType);
         }
 
+        return services;
+    }
+
+    public static IServiceCollection AddFeatureManagementService(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IFeatureService, FeatureService>();
         return services;
     }
 

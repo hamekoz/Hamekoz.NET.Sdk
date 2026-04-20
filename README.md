@@ -75,6 +75,16 @@ Extensiones DI en `ServiceCollectionExtensions`:
 - `AddCrudServices<TDbContext>()` permite control más explícito del registro template.
 - `AddUniqueImplementationOfServices()` registra interfaces con implementación única.
 - `AddTemplateServices(...)` habilita patrones genéricos por herencia.
+- `AddFeatureManagementService()` registra un servicio singleton para gestión de features en 3 niveles con precedencia `nivel 3 > nivel 2 > nivel 1`.
+
+### 7) Gestión de features en 3 niveles
+
+El SDK incluye `IFeatureService` / `FeatureService` para resolver flags en jerarquía:
+
+- `SetLevel1Async(featureKey, isEnabled)` para configuración global.
+- `SetLevel2Async(featureKey, level2Key, isEnabled)` para alcance intermedio.
+- `SetLevel3Async(featureKey, level2Key, level3Key, isEnabled)` para alcance más específico.
+- `IsEnabledAsync(...)` aplica precedencia: nivel 3, luego nivel 2, luego nivel 1 y por último `defaultValue`.
 
 ## Flujo recomendado para crear una app basada en el SDK
 
