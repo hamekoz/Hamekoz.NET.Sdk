@@ -95,6 +95,61 @@ public class SubscriptionServiceTests
     }
 
     [Fact]
+    public async Task AssignPlanAsync_Should_AssignWeeklyPeriod_WithExpirationInSevenDays()
+    {
+        var catalogService = new SubscriptionCatalogService(_planStore);
+        var service = new SubscriptionService(catalogService, _planStore, _subscriptionStore);
+
+        await catalogService.SavePlanAsync(new SubscriptionPlanDefinition
+        {
+            ApplicationId = "app-weekly",
+            Id = "pro-weekly",
+            Name = "Pro Weekly",
+            Description = "Plan profesional semanal",
+            IsActive = true,
+            IsDefault = false,
+            IsFree = false,
+            IncludedFeatures = ["feature.weekly"],
+            AvailablePeriods = [SubscriptionPeriod.Weekly]
+        });
+
+        var before = DateTime.UtcNow;
+        var assigned = await service.AssignPlanAsync("app-weekly", "user-weekly", "pro-weekly", SubscriptionPeriod.Weekly);
+        var after = DateTime.UtcNow;
+
+        Assert.Equal("pro-weekly", assigned.PlanId);
+        Assert.Equal(SubscriptionPeriod.Weekly, assigned.Period);
+        Assert.NotNull(assigned.ExpiresAt);
+        Assert.True(assigned.ExpiresAt >= before.AddDays(7));
+        Assert.True(assigned.ExpiresAt <= after.AddDays(7));
+    }
+
+    [Fact]
+    public async Task EnsureActiveSubscriptionAsync_Should_UseWeeklyPeriod_WhenOnlyWeeklyIsAvailable()
+    {
+        var catalogService = new SubscriptionCatalogService(_planStore);
+        var service = new SubscriptionService(catalogService, _planStore, _subscriptionStore);
+
+        await catalogService.SavePlanAsync(new SubscriptionPlanDefinition
+        {
+            ApplicationId = "app-weekly-free",
+            Id = "free",
+            Name = "Free",
+            Description = "Plan gratuito semanal",
+            IsActive = true,
+            IsDefault = true,
+            IsFree = true,
+            IncludedFeatures = [],
+            AvailablePeriods = [SubscriptionPeriod.Weekly]
+        });
+
+        var subscription = await service.EnsureActiveSubscriptionAsync("app-weekly-free", "user-weekly-free");
+
+        Assert.Equal(SubscriptionPeriod.Weekly, subscription.Period);
+        Assert.NotNull(subscription.ExpiresAt);
+    }
+
+    [Fact]
     public async Task EnsureActiveSubscriptionAsync_Should_ThrowValidationException_WhenFreePlanHasNoSupportedPeriod()
     {
         var catalogService = new SubscriptionCatalogService(_planStore);

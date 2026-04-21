@@ -4,5 +4,6 @@ public enum SubscriptionPeriod
 {
     Monthly = 0,
     Annual = 1,
-    Permanent = 2
+    Permanent = 2,
+    Weekly = 3
 }

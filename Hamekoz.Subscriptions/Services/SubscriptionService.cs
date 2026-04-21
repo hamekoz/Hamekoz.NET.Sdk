@@ -148,6 +148,7 @@ public sealed class SubscriptionService(
 
     private static DateTime? CalculateExpiration(SubscriptionPeriod period, DateTime now) => period switch
     {
+        SubscriptionPeriod.Weekly => now.AddDays(7),
         SubscriptionPeriod.Monthly => now.AddMonths(1),
         SubscriptionPeriod.Annual => now.AddYears(1),
         SubscriptionPeriod.Permanent => null,
@@ -169,6 +170,11 @@ public sealed class SubscriptionService(
         if (freePlan.AvailablePeriods.Contains(SubscriptionPeriod.Monthly))
         {
             return SubscriptionPeriod.Monthly;
+        }
+
+        if (freePlan.AvailablePeriods.Contains(SubscriptionPeriod.Weekly))
+        {
+            return SubscriptionPeriod.Weekly;
         }
 
         throw new ValidationException($"El plan '{freePlan.Id}' no expone períodos soportados para asignación automática.");
