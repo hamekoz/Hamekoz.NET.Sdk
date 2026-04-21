@@ -1,3 +1,4 @@
+using Hamekoz.Api.Exceptions;
 using Hamekoz.Subscriptions.Models;
 
 namespace Hamekoz.Subscriptions.Services;
@@ -21,7 +22,7 @@ public sealed class SubscriptionCatalogService(ISubscriptionPlanStore planStore)
         var plans = await _planStore.GetPlansAsync(applicationId, cancellationToken);
         var plan = plans.FirstOrDefault(existing => string.Equals(existing.Id, planId, StringComparison.OrdinalIgnoreCase));
 
-        return plan ?? throw new InvalidOperationException($"No se encontro el plan '{planId}' para la aplicacion '{applicationId}'.");
+        return plan ?? throw new NotFoundException($"No se encontró el plan '{planId}' para la aplicación '{applicationId}'.");
     }
 
     public async Task<SubscriptionPlanDefinition> SavePlanAsync(SubscriptionPlanDefinition plan, CancellationToken cancellationToken = default)
@@ -91,17 +92,17 @@ public sealed class SubscriptionCatalogService(ISubscriptionPlanStore planStore)
 
         if (plan.IsDefault && !plan.IsFree)
         {
-            throw new InvalidOperationException("El plan por defecto debe ser gratuito.");
+            throw new ValidationException("El plan por defecto debe ser gratuito.");
         }
 
         if (!plan.IsActive && plan.IsDefault)
         {
-            throw new InvalidOperationException("El plan por defecto debe estar activo.");
+            throw new ValidationException("El plan por defecto debe estar activo.");
         }
 
         if (plan.AvailablePeriods.Count == 0)
         {
-            throw new InvalidOperationException("El plan debe exponer al menos un periodo disponible.");
+            throw new ValidationException("El plan debe exponer al menos un período disponible.");
         }
     }
 }

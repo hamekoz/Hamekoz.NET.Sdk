@@ -1,5 +1,6 @@
 using Hamekoz.Features.Services;
 using Hamekoz.Features.Stores;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hamekoz.Features.Extensions;

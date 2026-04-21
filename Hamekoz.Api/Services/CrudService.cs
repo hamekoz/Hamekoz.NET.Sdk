@@ -4,6 +4,7 @@ using Hamekoz.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hamekoz.Api.Services;
+
 public class CrudService<T, C>(C context) : ICrudService<T>
     where T : Entity
     where C : DbContext

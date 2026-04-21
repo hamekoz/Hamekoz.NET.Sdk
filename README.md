@@ -115,19 +115,19 @@ SDK base para construir servicios reutilizables del ecosistema Hamekoz sobre .NE
 
 ## Proyectos principales
 
-- Hamekoz.Api: infraestructura generica para CRUD y APIs REST.
-- Hamekoz.Features: resolucion de features por aplicacion, plan y usuario.
-- Hamekoz.Subscriptions: catalogo y ciclo de vida de suscripciones con plan free obligatorio.
-- Hamekoz.Api.Tests: pruebas unitarias de la base comun.
+- Hamekoz.Api: infraestructura genérica para CRUD y APIs REST.
+- Hamekoz.Features: resolución de features por aplicación, plan y usuario.
+- Hamekoz.Subscriptions: catálogo y ciclo de vida de suscripciones con plan free obligatorio.
+- Hamekoz.Api.Tests: pruebas unitarias de la base común.
 
 ## Nuevas capacidades de plataforma
 
-- Cada aplicacion puede definir sus propios planes y features sin cambiar el dominio comun.
-- Siempre existe un plan gratuito activo y por defecto para cada aplicacion.
-- Cada usuario obtiene una suscripcion activa aunque no tenga plan pago.
-- Los features efectivos se resuelven en capas: aplicacion, plan y usuario.
+- Cada aplicación puede definir sus propios planes y features sin cambiar el dominio común.
+- Siempre existe un plan gratuito activo y por defecto para cada aplicación.
+- Cada usuario obtiene una suscripción activa aunque no tenga plan pago.
+- Los features efectivos se resuelven en capas: aplicación, plan y usuario.
 
-## Direccion de arquitectura
+## Dirección de arquitectura
 
 La base actual deja preparados dos dominios que luego pueden exponerse como microservicios del ecosistema:
 
@@ -135,4 +135,4 @@ La base actual deja preparados dos dominios que luego pueden exponerse como micr
 - servicio de suscripciones
 - servicio de features
 
-Mas detalle en docs/platform-services.md.
+Más detalle en docs/platform-services.md.

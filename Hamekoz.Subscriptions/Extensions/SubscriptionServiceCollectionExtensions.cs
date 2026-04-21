@@ -1,5 +1,6 @@
 using Hamekoz.Subscriptions.Services;
 using Hamekoz.Subscriptions.Stores;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hamekoz.Subscriptions.Extensions;
