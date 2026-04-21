@@ -55,7 +55,6 @@ public class SubscriptionServiceTests
         Assert.Equal(SubscriptionPeriod.Monthly, assigned.Period);
         Assert.True(assigned.AutoRenew);
         Assert.Equal(2, subscriptions.Count);
-        Assert.Contains(subscriptions, subscription => subscription.PlanId == "free" && subscription.Status == SubscriptionStatus.Expired);
         Assert.Contains(subscriptions, subscription => subscription.PlanId == "free" && subscription.Status == SubscriptionStatus.Expired && !subscription.AutoRenew && subscription.ExpiresAt is not null);
         Assert.Equal(["billing.export", "courses.unlimited"], featureContext.SeedFeatures);
     }
@@ -93,5 +92,28 @@ public class SubscriptionServiceTests
         var action = () => service.AssignPlanAsync("app-1", "user-1", "missing-plan", SubscriptionPeriod.Monthly);
 
         await Assert.ThrowsAsync<NotFoundException>(action);
+    }
+
+    [Fact]
+    public async Task EnsureActiveSubscriptionAsync_Should_ThrowValidationException_WhenFreePlanHasNoSupportedPeriod()
+    {
+        var catalogService = new SubscriptionCatalogService(_planStore);
+        var service = new SubscriptionService(catalogService, _planStore, _subscriptionStore);
+        await catalogService.SavePlanAsync(new SubscriptionPlanDefinition
+        {
+            ApplicationId = "app-2",
+            Id = "free",
+            Name = "Free",
+            Description = "Plan gratuito",
+            IsActive = true,
+            IsDefault = true,
+            IsFree = true,
+            IncludedFeatures = [],
+            AvailablePeriods = [(SubscriptionPeriod)99]
+        });
+
+        var action = () => service.EnsureActiveSubscriptionAsync("app-2", "user-1");
+
+        await Assert.ThrowsAsync<ValidationException>(action);
     }
 }

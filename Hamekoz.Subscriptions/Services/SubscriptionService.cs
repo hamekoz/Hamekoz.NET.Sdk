@@ -9,15 +9,28 @@ namespace Hamekoz.Subscriptions.Services;
 public sealed class SubscriptionService(
     ISubscriptionCatalogService subscriptionCatalogService,
     ISubscriptionPlanStore planStore,
-    ISubscriptionStore subscriptionStore) : ISubscriptionService
+    ISubscriptionStore subscriptionStore) : ISubscriptionService, IDisposable
 {
     private readonly ConcurrentDictionary<string, SemaphoreSlim> _activeSubscriptionLocks = new(StringComparer.OrdinalIgnoreCase);
     private readonly ISubscriptionCatalogService _subscriptionCatalogService = subscriptionCatalogService;
     private readonly ISubscriptionPlanStore _planStore = planStore;
     private readonly ISubscriptionStore _subscriptionStore = subscriptionStore;
+    private bool _disposed;
+
+    public void Dispose()
+    {
+        _disposed = true;
+        foreach (var semaphore in _activeSubscriptionLocks.Values)
+        {
+            semaphore.Dispose();
+        }
+
+        _activeSubscriptionLocks.Clear();
+    }
 
     public async Task<UserSubscription> EnsureActiveSubscriptionAsync(string applicationId, string userId, CancellationToken cancellationToken = default)
     {
+        ThrowIfDisposed();
         ArgumentException.ThrowIfNullOrWhiteSpace(applicationId);
         ArgumentException.ThrowIfNullOrWhiteSpace(userId);
 
@@ -65,6 +78,7 @@ public sealed class SubscriptionService(
         bool autoRenew = false,
         CancellationToken cancellationToken = default)
     {
+        ThrowIfDisposed();
         ArgumentException.ThrowIfNullOrWhiteSpace(applicationId);
         ArgumentException.ThrowIfNullOrWhiteSpace(userId);
         ArgumentException.ThrowIfNullOrWhiteSpace(planId);
@@ -119,6 +133,7 @@ public sealed class SubscriptionService(
 
     public async Task<FeatureContext> BuildFeatureContextAsync(string applicationId, string userId, CancellationToken cancellationToken = default)
     {
+        ThrowIfDisposed();
         var subscription = await EnsureActiveSubscriptionAsync(applicationId, userId, cancellationToken);
         var plan = await _subscriptionCatalogService.GetPlanAsync(applicationId, subscription.PlanId, cancellationToken);
 
@@ -146,11 +161,21 @@ public sealed class SubscriptionService(
             return SubscriptionPeriod.Permanent;
         }
 
-        if (freePlan.AvailablePeriods.Count > 0)
+        if (freePlan.AvailablePeriods.Contains(SubscriptionPeriod.Annual))
         {
-            return freePlan.AvailablePeriods[0];
+            return SubscriptionPeriod.Annual;
         }
 
-        throw new ValidationException($"El plan '{freePlan.Id}' no expone períodos disponibles.");
+        if (freePlan.AvailablePeriods.Contains(SubscriptionPeriod.Monthly))
+        {
+            return SubscriptionPeriod.Monthly;
+        }
+
+        throw new ValidationException($"El plan '{freePlan.Id}' no expone períodos soportados para asignación automática.");
+    }
+
+    private void ThrowIfDisposed()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
     }
 }
