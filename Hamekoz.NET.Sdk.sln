@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hamekoz.NET.Sdk.AppHost", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hamekoz.NET.Sdk.ServiceDefaults", "Hamekoz.NET.Sdk.ServiceDefaults\Hamekoz.NET.Sdk.ServiceDefaults.csproj", "{07835AA0-B30E-80A1-A43E-EFFD08FFB1A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hamekoz.Features", "Hamekoz.Features\Hamekoz.Features.csproj", "{B3CA71A6-21C4-4B19-A965-3D7236895E07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hamekoz.Subscriptions", "Hamekoz.Subscriptions\Hamekoz.Subscriptions.csproj", "{7EE8C175-C067-433B-9A67-92C6CA14D248}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{07835AA0-B30E-80A1-A43E-EFFD08FFB1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07835AA0-B30E-80A1-A43E-EFFD08FFB1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07835AA0-B30E-80A1-A43E-EFFD08FFB1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CA71A6-21C4-4B19-A965-3D7236895E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CA71A6-21C4-4B19-A965-3D7236895E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CA71A6-21C4-4B19-A965-3D7236895E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CA71A6-21C4-4B19-A965-3D7236895E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE8C175-C067-433B-9A67-92C6CA14D248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE8C175-C067-433B-9A67-92C6CA14D248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE8C175-C067-433B-9A67-92C6CA14D248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE8C175-C067-433B-9A67-92C6CA14D248}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
