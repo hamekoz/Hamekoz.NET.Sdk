@@ -110,3 +110,29 @@ dotnet test
 3. **Contratos estables**: mantener marker interfaces y `PagedResult<T>` como contratos reutilizables.
 4. **Errores homogéneos**: centralizar manejo de excepciones con middleware.
 5. **Ejemplo ejecutable siempre al día**: usar `Hamekoz.Api.Example` como plantilla viva para nuevos proyectos.
+
+SDK base para construir servicios reutilizables del ecosistema Hamekoz sobre .NET.
+
+## Proyectos principales
+
+- Hamekoz.Api: infraestructura genérica para CRUD y APIs REST.
+- Hamekoz.Features: resolución de features por aplicación, plan y usuario.
+- Hamekoz.Subscriptions: catálogo y ciclo de vida de suscripciones con plan free obligatorio.
+- Hamekoz.Api.Tests: pruebas unitarias de la base común.
+
+## Nuevas capacidades de plataforma
+
+- Cada aplicación puede definir sus propios planes y features sin cambiar el dominio común.
+- Siempre existe un plan gratuito activo y por defecto para cada aplicación.
+- Cada usuario obtiene una suscripción activa aunque no tenga plan pago.
+- Los features efectivos se resuelven en capas: aplicación, plan y usuario.
+
+## Dirección de arquitectura
+
+La base actual deja preparados dos dominios que luego pueden exponerse como microservicios del ecosistema:
+
+- servicio de usuarios e identidad compartido
+- servicio de suscripciones
+- servicio de features
+
+Más detalle en docs/platform-services.md.
