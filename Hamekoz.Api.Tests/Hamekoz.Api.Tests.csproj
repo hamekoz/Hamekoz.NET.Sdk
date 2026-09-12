@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hamekoz.Api\Hamekoz.Api.csproj" />
+    <ProjectReference Include="..\Hamekoz.Features\Hamekoz.Features.csproj" />
+    <ProjectReference Include="..\Hamekoz.Subscriptions\Hamekoz.Subscriptions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
